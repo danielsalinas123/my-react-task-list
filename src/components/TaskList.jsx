@@ -11,6 +11,10 @@ export default function TaskList()
             <Task leyenda="Tarea 3"/>
             <Task leyenda="Tarea 4"/>
             <Task leyenda="Tarea 5"/>
+            <div style={{"margin-top":"100px"}}>
+                <label>Tienes 2 tareas pendientes</label>
+                <button>Limpiar Todo</button>
+            </div>
         </div>
     );
 }
