@@ -1,0 +1,5 @@
+Este producto consiste en una lista de tareas desarrollada para entornos web donde los usuarios podrán listar sus tareas pendientes junto con su respectiva descripción, establecer su estado (completada o pendiente) y añadir, eliminar o modificar sus tareas conforme a sus necesidades.
+
+Además de las funcionalidades previamente enunciadas, la aplicación almacena localmente (en la memoria de tu dispositivo) las tareas que has listado y su respectivo estado, por lo tanto, a pesar que de que no tengas conexión a internet podrás manipular tu listado desde un navegador web sin ningún problema.
+
+Usar esta aplicación te permitirá mantenerte al día con tus cronogramas de trabajo, evitándote el riesgo y las molestias de olvidar tus actividades pendientes y permitiéndote dejar constancia de que actividades has realizado a la fecha, además podrás hacer uso de ella desde cualquier dispositivo mediante un navegador web sin necesidad de conexión a internet.

@@ -107,9 +107,10 @@ export default function TaskList()
             <input type="text" value={task}
             onChange={(e)=>setTask(e.target.value)}
             placeholder="Añada su tarea nueva"/>
-            <button onClick={handleAddTask}>+</button>
 
+            <button onClick={handleAddTask}>+</button>
             <br/><br/>
+            
             <textarea rows="3" cols="25"
             value={taskDescription}
             placeholder="Describa la tarea..."
