@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
 import Task from "./Task";
+import { handleAddTask,handleEliminarTodo,
+        handleActualizarEstadoClickdesdePadre,
+        handleEliminarTareaClickDesdePadre,
+        handleEditarTareaClickDesdePadre } from "../hooks/customHooks";
 
 export default function TaskList()
 {
@@ -8,7 +12,8 @@ export default function TaskList()
     const [taskDescription,setTaskDescription]=useState("");
     const [numeroTareasPendientes,setNumeroTareasPendientes]=useState(0);
 
-    useEffect(()=>{
+    useEffect(()=>
+    {
         const localStorageData = localStorage.getItem("estadoTareas");
         const storedTasks = JSON.parse(localStorageData);
 
@@ -19,96 +24,30 @@ export default function TaskList()
         }
     },[]);
 
-    function handleAddTask()
-    {
-        let tareaAñadida={"tarea":task,"descripcion":taskDescription,"completada":false};
-        setListTasks([...listTasks,tareaAñadida]);
-        localStorage.setItem("estadoTareas",JSON.stringify([...listTasks,tareaAñadida]));
-        setNumeroTareasPendientes(numeroTareasPendientes+1);
-        setTask("");
-        setTaskDescription("");
-    }
-
     const handleActualizarEstadoClick = (nombreTarea,estado)=>
-    {
-        let newListTask=[...listTasks];
+        handleActualizarEstadoClickdesdePadre(nombreTarea,estado,listTasks,
+            setNumeroTareasPendientes,numeroTareasPendientes,setListTasks);
 
-        newListTask.filter(item=>{
-            if(item.tarea==nombreTarea)
-            {
-                item.completada=estado;
-                if(estado)
-                    setNumeroTareasPendientes(numeroTareasPendientes-1);
-                else
-                    setNumeroTareasPendientes(numeroTareasPendientes+1);
-            }
-        });
-           
-        setListTasks(newListTask);
-        localStorage.setItem("estadoTareas",JSON.stringify(newListTask));
-    }
 
     const handleEliminarTareaClick = (nombreTarea)=>
-    {
-        let auxTareaPediente=false;
-        listTasks.filter(item=>{
-            if(item.tarea==nombreTarea)
-                if(item.completada==false)
-                    auxTareaPediente=true;
-        });
-
-        if(auxTareaPediente)
-            setNumeroTareasPendientes(numeroTareasPendientes-1);
-
-        let newListTask=listTasks.filter(item => item.tarea!=nombreTarea);
-        setListTasks(newListTask);
-        localStorage.setItem("estadoTareas",JSON.stringify(newListTask));
-
-        setTask("");
-        setTaskDescription("");
-    }
-
-   const handleEliminarTodo =()=>
-   {
-        setListTasks([]);
-        localStorage.setItem("estadoTareas",JSON.stringify([]));
-        setNumeroTareasPendientes(0);
-        setTask("");
-        setTaskDescription("");
-   }
+        handleEliminarTareaClickDesdePadre(nombreTarea,setTask,setTaskDescription,
+            numeroTareasPendientes,setNumeroTareasPendientes,listTasks,setListTasks);
 
    const handleEditarTareaClick=(nombreTarea)=>
-   {
-        if(task!="" && taskDescription!="")
-        {
-            let newListTask=[...listTasks];
+        handleEditarTareaClickDesdePadre(nombreTarea,task,setTask,taskDescription,
+            setTaskDescription,listTasks,setListTasks);
 
-            newListTask.filter(item=>{
-                if(item.tarea==nombreTarea)
-                {
-                    item.tarea=task;
-                    item.descripcion=taskDescription;
-                }
-            });
-
-            setListTasks(newListTask);
-            localStorage.setItem("estadoTareas",JSON.stringify(newListTask));
-        }
-        else
-            alert("Ambos campos de texto son obligatorios para editar la tarea");
-
-        setTask("");
-        setTaskDescription("");
-   }
-
-    return(
+   return(
         <div className="listadoTareas">
 
             <input type="text" value={task}
             onChange={(e)=>setTask(e.target.value)}
             placeholder="Añada su tarea nueva"/>
 
-            <button onClick={handleAddTask}>+</button>
+            <button onClick={()=>
+                handleAddTask(task,setTask,listTasks,setListTasks,taskDescription,
+                    setTaskDescription,numeroTareasPendientes,setNumeroTareasPendientes)
+                }>+</button>
             <br/><br/>
             
             <textarea rows="3" cols="25"
@@ -136,7 +75,9 @@ export default function TaskList()
 
             <div style={{marginTop:"20px"}}>
                 <label>Tienes {numeroTareasPendientes} tareas pendientes</label>
-                <button onClick={handleEliminarTodo}>Limpiar Todo</button>
+                <button onClick={()=>
+                    handleEliminarTodo(setListTasks,setNumeroTareasPendientes,setTask,setTaskDescription)
+                    }>Limpiar Todo</button>
             </div>
         </div>
     );
