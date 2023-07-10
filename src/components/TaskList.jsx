@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react";
 import Task from "./Task";
-import { handleAddTask,handleEliminarTodo,
-        handleActualizarEstadoClickdesdePadre,
-        handleEliminarTareaClickDesdePadre,
-        handleEditarTareaClickDesdePadre } from "../hooks/customHooks";
+import useManipularLista from "../hooks/customHooks";
 
 export default function TaskList()
 {
@@ -11,6 +8,11 @@ export default function TaskList()
     const [task,setTask]=useState("");
     const [taskDescription,setTaskDescription]=useState("");
     const [numeroTareasPendientes,setNumeroTareasPendientes]=useState(0);
+
+    const {handleAddTask,handleEliminarTodo,handleActualizarEstadoClickDesdePadre,
+        handleEditarTareaClickDesdePadre,handleEliminarTareaClickDesdePadre} = 
+        useManipularLista(listTasks,setListTasks,task,setTask,taskDescription,setTaskDescription,
+            numeroTareasPendientes,setNumeroTareasPendientes);
 
     useEffect(()=>
     {
@@ -25,17 +27,14 @@ export default function TaskList()
     },[]);
 
     const handleActualizarEstadoClick = (nombreTarea,estado)=>
-        handleActualizarEstadoClickdesdePadre(nombreTarea,estado,listTasks,
-            setNumeroTareasPendientes,numeroTareasPendientes,setListTasks);
+        handleActualizarEstadoClickDesdePadre(nombreTarea,estado);
 
 
     const handleEliminarTareaClick = (nombreTarea)=>
-        handleEliminarTareaClickDesdePadre(nombreTarea,setTask,setTaskDescription,
-            numeroTareasPendientes,setNumeroTareasPendientes,listTasks,setListTasks);
+        handleEliminarTareaClickDesdePadre(nombreTarea);
 
    const handleEditarTareaClick=(nombreTarea)=>
-        handleEditarTareaClickDesdePadre(nombreTarea,task,setTask,taskDescription,
-            setTaskDescription,listTasks,setListTasks);
+        handleEditarTareaClickDesdePadre(nombreTarea);
 
    return(
         <div className="listadoTareas">
@@ -44,10 +43,7 @@ export default function TaskList()
             onChange={(e)=>setTask(e.target.value)}
             placeholder="Añada su tarea nueva"/>
 
-            <button onClick={()=>
-                handleAddTask(task,setTask,listTasks,setListTasks,taskDescription,
-                    setTaskDescription,numeroTareasPendientes,setNumeroTareasPendientes)
-                }>+</button>
+            <button onClick={handleAddTask}>+</button>
             <br/><br/>
             
             <textarea rows="3" cols="25"
@@ -75,9 +71,7 @@ export default function TaskList()
 
             <div style={{marginTop:"20px"}}>
                 <label>Tienes {numeroTareasPendientes} tareas pendientes</label>
-                <button onClick={()=>
-                    handleEliminarTodo(setListTasks,setNumeroTareasPendientes,setTask,setTaskDescription)
-                    }>Limpiar Todo</button>
+                <button onClick={handleEliminarTodo}>Limpiar Todo</button>
             </div>
         </div>
     );

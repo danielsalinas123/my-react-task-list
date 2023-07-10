@@ -1,24 +1,26 @@
-export function handleAddTask(task,setTask,listTasks,setListTasks,taskDescription,setTaskDescription,numeroTareasPendientes,setNumeroTareasPendientes)
+export default function useManipularLista(listTasks,setListTasks,task,setTask,taskDescription,setTaskDescription,
+    numeroTareasPendientes,setNumeroTareasPendientes)
 {
-    let tareaAñadida={"tarea":task,"descripcion":taskDescription,"completada":false};
-    setListTasks([...listTasks,tareaAñadida]);
-    localStorage.setItem("estadoTareas",JSON.stringify([...listTasks,tareaAñadida]));
-    setNumeroTareasPendientes(numeroTareasPendientes+1);
-    setTask("");
-    setTaskDescription("");
-}
+    function handleAddTask()
+    {
+        let tareaAñadida={"tarea":task,"descripcion":taskDescription,"completada":false};
+        setListTasks([...listTasks,tareaAñadida]);
+        localStorage.setItem("estadoTareas",JSON.stringify([...listTasks,tareaAñadida]));
+        setNumeroTareasPendientes(numeroTareasPendientes+1);
+        setTask("");
+        setTaskDescription("");
+    }
 
-export const handleEliminarTodo=(setListTasks,setNumeroTareasPendientes,setTask,setTaskDescription)=>
-{
-     setListTasks([]);
-     localStorage.setItem("estadoTareas",JSON.stringify([]));
-     setNumeroTareasPendientes(0);
-     setTask("");
-     setTaskDescription("");
-}
+    const handleEliminarTodo=()=>
+    {
+        setListTasks([]);
+        localStorage.setItem("estadoTareas",JSON.stringify([]));
+        setNumeroTareasPendientes(0);
+        setTask("");
+        setTaskDescription("");
+    }
 
-export const handleActualizarEstadoClickdesdePadre = 
-(nombreTarea,estado,listTasks,setNumeroTareasPendientes,numeroTareasPendientes,setListTasks)=>
+    const handleActualizarEstadoClickDesdePadre = (nombreTarea,estado)=>
     {
         let newListTask=[...listTasks];
 
@@ -37,8 +39,7 @@ export const handleActualizarEstadoClickdesdePadre =
         localStorage.setItem("estadoTareas",JSON.stringify(newListTask));
     }
 
-    export const handleEliminarTareaClickDesdePadre = 
-    (nombreTarea,setTask,setTaskDescription,numeroTareasPendientes,setNumeroTareasPendientes,listTasks,setListTasks)=>
+    const handleEliminarTareaClickDesdePadre = (nombreTarea)=>
     {
         let auxTareaPediente=false;
         listTasks.filter(item=>{
@@ -58,8 +59,7 @@ export const handleActualizarEstadoClickdesdePadre =
         setTaskDescription("");
     }
 
-    export const handleEditarTareaClickDesdePadre=
-    (nombreTarea,task,setTask,taskDescription,setTaskDescription,listTasks,setListTasks)=>
+    const handleEditarTareaClickDesdePadre = (nombreTarea)=>
    {
         if(task!="" && taskDescription!="")
         {
@@ -82,3 +82,7 @@ export const handleActualizarEstadoClickdesdePadre =
         setTask("");
         setTaskDescription("");
    }
+
+   return {handleAddTask,handleEliminarTodo,handleActualizarEstadoClickDesdePadre,
+    handleEditarTareaClickDesdePadre,handleEliminarTareaClickDesdePadre};
+}
