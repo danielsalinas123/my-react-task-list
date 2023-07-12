@@ -1,7 +1,7 @@
 export default function useManipularLista(listTasks,setListTasks,task,setTask,taskDescription,setTaskDescription,
-    numeroTareasPendientes,setNumeroTareasPendientes)
+    numeroTareasPendientes,setNumeroTareasPendientes,formValidation,setFormValidation)
 {
-    function handleAddTask()
+    function handleAddTask(event)
     {
         let tareaAñadida={"tarea":task,"descripcion":taskDescription,"completada":false};
         setListTasks([...listTasks,tareaAñadida]);
@@ -18,6 +18,12 @@ export default function useManipularLista(listTasks,setListTasks,task,setTask,ta
         setNumeroTareasPendientes(0);
         setTask("");
         setTaskDescription("");
+        setFormValidation(
+            {
+                ...formValidation,
+                task:undefined
+            }
+        );
     }
 
     const handleActualizarEstadoClickDesdePadre = (nombreTarea,estado)=>
@@ -57,11 +63,27 @@ export default function useManipularLista(listTasks,setListTasks,task,setTask,ta
 
         setTask("");
         setTaskDescription("");
+        setFormValidation(
+            {
+                ...formValidation,
+                task:undefined
+            }
+        );
     }
 
     const handleEditarTareaClickDesdePadre = (nombreTarea)=>
    {
-        if(task!="" && taskDescription!="")
+        if(task.length==0)
+            setFormValidation({
+                ...formValidation,
+                task:"El campo tareas es obligatorio para modificar la tarea."
+            });
+        else if(task.length<3)
+            setFormValidation({
+                ...formValidation,
+                task:"El campo tareas debe tener mínimo 3 caracteres"
+            });
+        else
         {
             let newListTask=[...listTasks];
 
@@ -75,14 +97,44 @@ export default function useManipularLista(listTasks,setListTasks,task,setTask,ta
 
             setListTasks(newListTask);
             localStorage.setItem("estadoTareas",JSON.stringify(newListTask));
-        }
-        else
-            alert("Ambos campos de texto son obligatorios para editar la tarea");
 
-        setTask("");
-        setTaskDescription("");
+            setTask("");
+            setTaskDescription("");
+            setFormValidation(
+                {
+                    ...formValidation,
+                    task:undefined
+                }
+            )
+        }
+   }
+
+   function ComprobarCampoTareas(value)
+   {
+    if(value.length==0)
+    setFormValidation(
+        {
+            ...formValidation,
+            task:"El campo tareas es obligatorio"
+        }
+    );
+    else if(value.length<3)
+        setFormValidation(
+            {
+            ...formValidation,
+                task:"El campo tareas debe tener mínimo 3 caracteres"
+            }
+        )
+    else
+        setFormValidation(
+            {
+                ...formValidation,
+                task:""
+            }
+        );
+    setTask(value);
    }
 
    return {handleAddTask,handleEliminarTodo,handleActualizarEstadoClickDesdePadre,
-    handleEditarTareaClickDesdePadre,handleEliminarTareaClickDesdePadre};
+    handleEditarTareaClickDesdePadre,handleEliminarTareaClickDesdePadre,ComprobarCampoTareas};
 }

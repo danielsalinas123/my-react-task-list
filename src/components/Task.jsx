@@ -31,7 +31,7 @@ export default function Task(props)
                 <i className="material-icons" title="Eliminar Tarea"
                 onClick={handleEliminarTarea}>delete_forever</i>
 
-                <p>{descripcion}</p>
+                <p><b><i>Descripción: </i></b>{descripcion}</p>
             </span>
         </li>
     );

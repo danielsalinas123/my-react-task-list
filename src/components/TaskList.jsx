@@ -9,22 +9,34 @@ export default function TaskList()
     const [taskDescription,setTaskDescription]=useState("");
     const [numeroTareasPendientes,setNumeroTareasPendientes]=useState(0);
 
+    //Validación del formulario
+    const [formValidation,setFormValidation]=useState({task:undefined});
+    const isFormValid = Object.keys(formValidation).every(
+        key=>formValidation[key]=="");
+
+    //hook esterno
     const {handleAddTask,handleEliminarTodo,handleActualizarEstadoClickDesdePadre,
-        handleEditarTareaClickDesdePadre,handleEliminarTareaClickDesdePadre} = 
+        handleEditarTareaClickDesdePadre,handleEliminarTareaClickDesdePadre,ComprobarCampoTareas} = 
         useManipularLista(listTasks,setListTasks,task,setTask,taskDescription,setTaskDescription,
-            numeroTareasPendientes,setNumeroTareasPendientes);
+            numeroTareasPendientes,setNumeroTareasPendientes,formValidation,setFormValidation);
 
     useEffect(()=>
     {
-        const localStorageData = localStorage.getItem("estadoTareas");
-        const storedTasks = JSON.parse(localStorageData);
-
-        if(storedTasks!=null)
-        {
-            setListTasks(storedTasks);
-            setNumeroTareasPendientes(storedTasks.filter(item=>item.completada==false).length);
+       const localStorageData = localStorage.getItem("estadoTareas");
+       const storedTasks = JSON.parse(localStorageData);
+        
+       if(storedTasks!=null)
+       {
+           setListTasks(storedTasks);
+           setNumeroTareasPendientes(storedTasks.filter(item=>item.completada==false).length);
         }
     },[]);
+
+    function handleTaskChange(event)
+    {
+        const {value}=event.target;
+        ComprobarCampoTareas(value);
+    }
 
     const handleActualizarEstadoClick = (nombreTarea,estado)=>
         handleActualizarEstadoClickDesdePadre(nombreTarea,estado);
@@ -39,19 +51,25 @@ export default function TaskList()
    return(
         <div className="listadoTareas">
 
-            <input type="text" value={task}
-            onChange={(e)=>setTask(e.target.value)}
-            placeholder="Añada su tarea nueva"/>
-
-            <button onClick={handleAddTask}>+</button>
-            <br/><br/>
-            
-            <textarea rows="3" cols="25"
-            value={taskDescription}
-            placeholder="Describa la tarea..."
-            onChange={(e)=>setTaskDescription(e.target.value)}
-            style={{resize:"none"}}
-            />
+            <form className="formTaskList">
+                <input type="text" value={task}
+                onChange={handleTaskChange}
+                placeholder="Añada su tarea nueva"/>
+                
+                <button disabled={!isFormValid}
+                onClick={handleAddTask}
+                >+</button>
+                
+                <br/><span style={{color:"red"}}>{formValidation.task}</span>
+                
+                <br/>
+                <textarea rows="3" cols="25"
+                value={taskDescription}
+                placeholder="Describa la tarea..."
+                onChange={(e)=>setTaskDescription(e.target.value)}
+                style={{resize:"none"}}
+                />
+            </form>
 
             <ol>
             {
