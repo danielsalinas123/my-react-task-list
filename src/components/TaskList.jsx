@@ -51,6 +51,8 @@ export default function TaskList()
    return(
         <div className="listadoTareas">
 
+            <h1>Lista de tareas</h1>
+
             <form className="formTaskList">
                 <input type="text" value={task}
                 onChange={handleTaskChange}

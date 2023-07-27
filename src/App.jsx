@@ -1,17 +1,21 @@
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css'
-import Header from './components/Header';
-import TaskList from './components/TaskList';
-
-
+import Home from './components/Home';
+import Menu from './components/Menu';
+import TaskList from "./components/TaskList"
+import SobreNosotros from './components/SobreNosotros';
 
 function App()
 {
-
   return (
-    <div>
-      <Header/>
-      <TaskList/>
-    </div>
+    <BrowserRouter>
+      <Menu/>
+      <Routes>
+        <Route path='/' element={<Home/>}/>
+        <Route path='/task-list' element={<TaskList/>}/>
+        <Route path='/about-us' element={<SobreNosotros/>}/>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
