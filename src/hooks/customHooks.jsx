@@ -29,7 +29,6 @@ export default function useManipularLista(listTasks,setListTasks,task,setTask,ta
                 task:undefined
             }
         );
-        console.log(`no me reinicie y formValidation vale ${formValidation.task}`);
     }
 
     const handleEliminarTodo=()=>
