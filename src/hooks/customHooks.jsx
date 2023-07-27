@@ -3,12 +3,33 @@ export default function useManipularLista(listTasks,setListTasks,task,setTask,ta
 {
     function handleAddTask(event)
     {
-        let tareaAñadida={"tarea":task,"descripcion":taskDescription,"completada":false};
-        setListTasks([...listTasks,tareaAñadida]);
-        localStorage.setItem("estadoTareas",JSON.stringify([...listTasks,tareaAñadida]));
-        setNumeroTareasPendientes(numeroTareasPendientes+1);
+        event.preventDefault();
+
+        let compobarTareaEnLista=false;
+        listTasks.find((item)=>{
+            if(item.tarea==task)
+                compobarTareaEnLista=true;
+        });
+
+        if(!compobarTareaEnLista)
+        {
+            let tareaAñadida={"tarea":task,"descripcion":taskDescription,"completada":false};
+            setListTasks([...listTasks,tareaAñadida]);
+            localStorage.setItem("estadoTareas",JSON.stringify([...listTasks,tareaAñadida]));
+            setNumeroTareasPendientes(numeroTareasPendientes+1);
+        }
+        else
+            alert(`La tarea "${task}" ya se encuentra en la lista de tareas.`);
+
         setTask("");
         setTaskDescription("");
+        setFormValidation(
+            {
+                ...formValidation,
+                task:undefined
+            }
+        );
+        console.log(`no me reinicie y formValidation vale ${formValidation.task}`);
     }
 
     const handleEliminarTodo=()=>
