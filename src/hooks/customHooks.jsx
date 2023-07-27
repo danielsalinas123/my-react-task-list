@@ -101,22 +101,34 @@ export default function useManipularLista(listTasks,setListTasks,task,setTask,ta
         else if(task.length<3)
             setFormValidation({
                 ...formValidation,
-                task:"El campo tareas debe tener mínimo 3 caracteres"
+                task:"El campo tareas debe tener mínimo 3 caracteres para modificar la tarea."
             });
         else
         {
-            let newListTask=[...listTasks];
-
-            newListTask.filter(item=>{
-                if(item.tarea==nombreTarea)
-                {
-                    item.tarea=task;
-                    item.descripcion=taskDescription;
-                }
+            let compobarTareaEnLista=false;
+            listTasks.find((item)=>{
+            if(item.tarea==task)
+                compobarTareaEnLista=true;
             });
 
-            setListTasks(newListTask);
-            localStorage.setItem("estadoTareas",JSON.stringify(newListTask));
+            if(compobarTareaEnLista==true && task!=nombreTarea)
+                alert(`La tarea "${task}" ya se encuentra en la lista, por lo tanto, no se modificará la tarea indicada con una tarea repetida.`);
+
+            if(!compobarTareaEnLista || task==nombreTarea)
+            {
+                let newListTask=[...listTasks];
+
+                newListTask.filter(item=>{
+                    if(item.tarea==nombreTarea)
+                    {
+                        item.tarea=task;
+                        item.descripcion=taskDescription;
+                    }
+                });
+
+                setListTasks(newListTask);
+                localStorage.setItem("estadoTareas",JSON.stringify(newListTask));
+            }
 
             setTask("");
             setTaskDescription("");
@@ -125,7 +137,7 @@ export default function useManipularLista(listTasks,setListTasks,task,setTask,ta
                     ...formValidation,
                     task:undefined
                 }
-            )
+            );
         }
    }
 
