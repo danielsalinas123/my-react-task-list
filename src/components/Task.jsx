@@ -1,3 +1,5 @@
+import { HStack, ListItem } from "@chakra-ui/layout";
+
 export default function Task(props)
 {
     const {nombre,descripcion,completada,onAcutalizarEstadoClick,
@@ -15,10 +17,9 @@ export default function Task(props)
         onEditarTareaClick(nombre);
 
     return (
-        <li>
-            <label>{nombre}</label>
-
-            <span>
+        <ListItem mb={3} w="50vw" border="1px dashed black" mx="auto">
+            <HStack justify="center" spacing={5} mb={2}>
+                <label>{nombre}</label>
                 <input type="checkBox"
                 value={nombre}
                 onChange={handleChange}
@@ -30,9 +31,8 @@ export default function Task(props)
 
                 <i className="material-icons" title="Eliminar Tarea"
                 onClick={handleEliminarTarea}>delete_forever</i>
-
+            </HStack>
                 <p><b><i>Descripción: </i></b>{descripcion}</p>
-            </span>
-        </li>
+        </ListItem>
     );
 }
