@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Task from "./Task";
 import useManipularLista from "../hooks/customHooks";
-import { Box, Flex, Heading, Spacer, Input, Button, Textarea, OrderedList, ListItem, HStack } from "@chakra-ui/react";
+import { Box, Flex, Heading, Spacer, Input, Button, Textarea, OrderedList, ListItem, HStack, useColorMode, useColorModeValue } from "@chakra-ui/react";
 
 export default function TaskList()
 {
@@ -49,6 +49,9 @@ export default function TaskList()
    const handleEditarTareaClick=(nombreTarea)=>
         handleEditarTareaClickDesdePadre(nombreTarea);
 
+    const {toggleColorMode} = useColorMode();
+    const formBackground = useColorModeValue("gray.200","gray,900");
+
    return(
         <Box>
 
@@ -56,7 +59,7 @@ export default function TaskList()
                 Lista de tareas</Heading>
 
             <Flex as="form" alignItems="center" justifyContent="center">
-                <Flex direction="column" bg="gray.400" p="12px" rounded="6px">
+                <Flex direction="column" bg={formBackground} p="12px" rounded="6px">
                     <Heading mb={3}>Tarea</Heading>
                     <Input placeholder="Ingrese la tarea nueva" variant="filled" mb={0} value={task} onChange={handleTaskChange}
                     />
@@ -73,6 +76,10 @@ export default function TaskList()
                     }}
                     >Añadir</Button>
 
+                    <Button onClick={toggleColorMode} mt={3} color="white" border="1px solid black" bg="gray.600"
+                    _disabled={{
+                        bg:"gray.200",
+                    }}>Toggle Color</Button>
                 </Flex>
             </Flex>
 
